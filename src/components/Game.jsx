@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Board } from "./Board";
 
 export const Game = () => {
-  const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
+  const [history, setHistory] = useState([
+    {
+      squares: Array(9).fill(null),
+      point: null
+    }
+  ]);
   const [stepNumber, setStepNumber] = useState(0);
   const [xIsNext, setXIsNext] = useState(true);
 
@@ -19,7 +24,14 @@ export const Game = () => {
 
     squares[i] = xIsNext ? "X" : "O";
 
-    setHistory(nowHistory.concat([{ squares: squares }]));
+    setHistory(
+      nowHistory.concat([
+        {
+          squares: squares,
+          point: i
+        }
+      ])
+    );
     setStepNumber(nowHistory.length);
     setXIsNext(!xIsNext);
   };
@@ -58,7 +70,12 @@ export const Game = () => {
   const winner = calculateWinner(current.squares);
 
   const moves = history.map((step, move) => {
-    const desc = move ? "Go to move #" + move : "Go to game start";
+    const col = (step.point % 3) + 1;
+    const row = (step.point / 3 + 1) | 0;
+
+    const desc = move
+      ? "Go to move #" + move + "(" + col + "," + row + ")"
+      : "Go to game start";
 
     return (
       <li key={move}>
