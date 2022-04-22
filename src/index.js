@@ -1,8 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import Game from "./components/Game";
+import App from "./App";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-root.render(<Game />);
+root.render(<App />);
