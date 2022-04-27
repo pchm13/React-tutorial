@@ -4,25 +4,32 @@ import { Square } from "./Square";
 export const Board = (props) => {
   const { squares, onClick } = props;
 
+  const renderSquare = (i) => {
+    return <Square key={i} value={squares[i]} onClick={() => onClick(i)} />;
+  };
+
+  const squareBoard = [];
+  const maxRow = 3;
+  const maxCol = 3;
+
+  for (let row = 0; row < maxRow; row++) {
+    const rowBoard = [];
+
+    for (let col = 0; col < maxCol; col++) {
+      const index = maxCol * row + col;
+      rowBoard.push(renderSquare(index));
+    }
+
+    squareBoard.push(
+      <div key={row} className="board-row">
+        {rowBoard}
+      </div>
+    );
+  }
+
   return (
     <>
-      <div>
-        <div className="board-row">
-          <Square value={squares[0]} onClick={() => onClick(0)} />
-          <Square value={squares[1]} onClick={() => onClick(1)} />
-          <Square value={squares[2]} onClick={() => onClick(2)} />
-        </div>
-        <div className="board-row">
-          <Square value={squares[3]} onClick={() => onClick(3)} />
-          <Square value={squares[4]} onClick={() => onClick(4)} />
-          <Square value={squares[5]} onClick={() => onClick(5)} />
-        </div>
-        <div className="board-row">
-          <Square value={squares[6]} onClick={() => onClick(6)} />
-          <Square value={squares[7]} onClick={() => onClick(7)} />
-          <Square value={squares[8]} onClick={() => onClick(8)} />
-        </div>
-      </div>
+      <div>{squareBoard}</div>
     </>
   );
 };
