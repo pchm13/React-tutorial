@@ -79,7 +79,12 @@ export const Game = () => {
 
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{desc}</button>
+        <button
+          className={move === stepNumber ? "bold" : ""}
+          onClick={() => jumpTo(move)}
+        >
+          {desc}
+        </button>
       </li>
     );
   });
