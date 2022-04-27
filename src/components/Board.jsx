@@ -2,10 +2,17 @@ import React from "react";
 import { Square } from "./Square";
 
 export const Board = (props) => {
-  const { squares, onClick } = props;
+  const { squares, onClick, winLine } = props;
 
-  const renderSquare = (i) => {
-    return <Square key={i} value={squares[i]} onClick={() => onClick(i)} />;
+  const renderSquare = (i, isHighlight) => {
+    return (
+      <Square
+        key={i}
+        value={squares[i]}
+        onClick={() => onClick(i)}
+        isHighlight={isHighlight}
+      />
+    );
   };
 
   const squareBoard = [];
@@ -17,7 +24,9 @@ export const Board = (props) => {
 
     for (let col = 0; col < maxCol; col++) {
       const index = maxCol * row + col;
-      rowBoard.push(renderSquare(index));
+      // 勝者が決定した時のみ値が入る、それ以外は[]
+      const isHighlight = winLine.includes(index);
+      rowBoard.push(renderSquare(index, isHighlight));
     }
 
     squareBoard.push(

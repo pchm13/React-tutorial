@@ -12,14 +12,15 @@ export const Game = () => {
   const [xIsNext, setXIsNext] = useState(true);
   const [isDesc, setIsDesc] = useState(false);
 
+  // マス目をクリックした時の動き
   const handleClick = (i) => {
     // 現時点のゲーム進行点が大事（sliceプロパティを使用する場合、現時点+1でstart~goal）
     const nowHistory = history.slice(0, stepNumber + 1);
     const current = nowHistory[nowHistory.length - 1];
     const squares = current.squares.slice();
 
-    // ゲームの決着がついてるかクリックしたマスが既に埋まってる場合
-    if (calculateWinner(squares) || squares[i]) {
+    // ゲームの決着がついてるか、クリックしたマスが既に埋まってる場合
+    if (calculateWinner(squares).winner || squares[i]) {
       return;
     }
 
@@ -42,6 +43,7 @@ export const Game = () => {
     setXIsNext(step % 2 === 0);
   };
 
+  // 勝利情報について
   const calculateWinner = (squares) => {
     const lines = [
       [0, 1, 2],
@@ -54,6 +56,11 @@ export const Game = () => {
       [2, 4, 6]
     ];
 
+    const result = {
+      winner: null,
+      winLine: []
+    };
+
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
 
@@ -62,14 +69,18 @@ export const Game = () => {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        return squares[a];
+        result.winner = squares[a];
+        result.winLine = lines[i];
       }
     }
+
+    return result;
   };
 
   const current = history[stepNumber];
-  const winner = calculateWinner(current.squares);
+  const { winner, winLine } = calculateWinner(current.squares);
 
+  // 履歴ボタン
   const moves = history.map((step, move) => {
     const col = (step.point % 3) + 1;
     const row = (step.point / 3 + 1) | 0;
@@ -90,6 +101,7 @@ export const Game = () => {
     );
   });
 
+  // ゲーム状況
   let status;
 
   if (winner) {
@@ -98,6 +110,7 @@ export const Game = () => {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
+  // ソート
   if (isDesc) {
     moves.reverse();
   }
@@ -106,7 +119,11 @@ export const Game = () => {
     <>
       <div className="game">
         <div className="game-board">
-          <Board squares={current.squares} onClick={(i) => handleClick(i)} />
+          <Board
+            squares={current.squares}
+            onClick={(i) => handleClick(i)}
+            winLine={winLine}
+          />
         </div>
         <div className="game-info">
           <div>{status}</div>
