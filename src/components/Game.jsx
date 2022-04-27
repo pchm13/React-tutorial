@@ -10,6 +10,7 @@ export const Game = () => {
   ]);
   const [stepNumber, setStepNumber] = useState(0);
   const [xIsNext, setXIsNext] = useState(true);
+  const [isDesc, setIsDesc] = useState(false);
 
   const handleClick = (i) => {
     // 現時点のゲーム進行点が大事（sliceプロパティを使用する場合、現時点+1でstart~goal）
@@ -97,6 +98,10 @@ export const Game = () => {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
+  if (isDesc) {
+    moves.reverse();
+  }
+
   return (
     <>
       <div className="game">
@@ -105,6 +110,13 @@ export const Game = () => {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <button
+            onClick={() => {
+              setIsDesc(!isDesc);
+            }}
+          >
+            ソートする
+          </button>
           <ol>{moves}</ol>
         </div>
       </div>
