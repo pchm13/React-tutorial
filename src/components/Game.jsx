@@ -106,6 +106,8 @@ export const Game = () => {
 
   if (winner) {
     status = "Winner: " + winner;
+  } else if (!winner && history.length === 10) {
+    status = "引き分けです。";
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
